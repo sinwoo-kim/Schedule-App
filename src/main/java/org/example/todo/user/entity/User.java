@@ -2,7 +2,6 @@ package org.example.todo.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.example.todo.common.BaseEntity;
 import org.example.todo.user.dto.request.LoginRequestDto;
 import org.example.todo.user.dto.request.SignUpRequestDto;
@@ -11,7 +10,6 @@ import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "user")
 public class User extends BaseEntity {

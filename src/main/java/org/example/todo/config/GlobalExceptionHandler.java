@@ -1,7 +1,7 @@
 package org.example.todo.config;
 
 import org.example.todo.common.ApiResponse;
-import org.example.todo.common.InvalidRequestException;
+import org.example.todo.common.exception.InvalidRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,4 +1,4 @@
-package org.example.todo.common;
+package org.example.todo.common.exception;
 
 public class InvalidRequestException extends RuntimeException {
     public InvalidRequestException(String message) {

@@ -1,9 +1,9 @@
 package org.example.todo.todo.service;
 
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.common.InvalidRequestException;
+import org.example.todo.common.exception.InvalidRequestException;
 import org.example.todo.todo.dto.request.TodoCreateRequestDto;
 import org.example.todo.todo.dto.response.TodoCreateResponseDto;
 import org.example.todo.todo.dto.response.TodoFindResponseDto;
@@ -14,13 +14,15 @@ import org.example.todo.todo.repository.TodoRepository;
 import org.example.todo.user.entity.User;
 import org.example.todo.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TodoServiceimpl implements TodoService {
 
     private final TodoRepository todoRepository;
@@ -28,6 +30,7 @@ public class TodoServiceimpl implements TodoService {
 
 
     // 1. todo CREATE
+    @Transactional
     @Override
     public TodoCreateResponseDto createTodo(
             TodoCreateRequestDto todoCreateRequestDto
@@ -81,6 +84,7 @@ public class TodoServiceimpl implements TodoService {
 
     // 5. todo DELETE
     @Override
+    @Transactional
     public void deleteTodo(Long todoId) {
 
         Todo foundTodo = todoRepository.findById(todoId)

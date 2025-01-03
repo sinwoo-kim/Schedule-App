@@ -2,13 +2,11 @@ package org.example.todo.todo.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.example.todo.common.BaseEntity;
 import org.example.todo.user.entity.User;
 
 
 @Getter
-@Setter
 @Entity(name = "todo")
 public class Todo extends BaseEntity {
 

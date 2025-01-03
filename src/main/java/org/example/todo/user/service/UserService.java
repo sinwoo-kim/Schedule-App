@@ -1,9 +1,8 @@
 package org.example.todo.user.service;
 
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.common.InvalidRequestException;
+import org.example.todo.common.exception.InvalidRequestException;
 import org.example.todo.config.PasswordEncoder;
 import org.example.todo.user.dto.request.LoginRequestDto;
 import org.example.todo.user.dto.request.SignUpRequestDto;
@@ -14,6 +13,7 @@ import org.example.todo.user.entity.User;
 import org.example.todo.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
@@ -51,16 +52,17 @@ public class UserService {
      * @param loginRequestDto
      * @return DTO 변환 로직을 사용
      */
+    @Transactional
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         // dto -> User 변환 로직 구현
         User loginRequest = User.toEntityFromLoginRequestDto(loginRequestDto);
         // 사용자 조회
-        User findLoginUser = userRepository.findByEmail(loginRequest.getEmail());
+        User foundUser = userRepository.findByEmail(loginRequest.getEmail());
 
-        if(!passwordEncoder.matches(loginRequest.getPassword(),findLoginUser.getPassword())) {
+        if(!passwordEncoder.matches(loginRequest.getPassword(),foundUser.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
-        return LoginResponseDto.of(findLoginUser);
+        return LoginResponseDto.of(foundUser);
     }
 
     // READ :: ALL
@@ -87,6 +89,7 @@ public class UserService {
     }
 
     // DELETE
+    @Transactional
     public void deleteUser(Long userId) {
         User foundUser = userRepository
                 .findById(userId).orElseThrow(() -> new InvalidRequestException("user not found"));
