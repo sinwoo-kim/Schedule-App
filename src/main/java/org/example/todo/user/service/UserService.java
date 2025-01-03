@@ -35,6 +35,7 @@ public class UserService {
      */
     @Transactional
     public SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto) {
+        // 유니크 값 유효성 검증
 
         // 비밀번호 암호화
         String rawPassword = signUpRequestDto.getPassword();
