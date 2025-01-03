@@ -3,6 +3,7 @@ package org.example.todo.todo.service;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.common.InvalidRequestException;
 import org.example.todo.todo.dto.request.TodoCreateRequestDto;
 import org.example.todo.todo.dto.response.TodoCreateResponseDto;
 import org.example.todo.todo.dto.response.TodoFindResponseDto;
@@ -32,7 +33,8 @@ public class TodoServiceimpl implements TodoService {
             TodoCreateRequestDto todoCreateRequestDto
     ) {
         log.info("1. todoService.createTodo() 실행");
-        User foundUser = userRepository.findByIdOrElseThrow(todoCreateRequestDto.userId());
+        User foundUser = userRepository.findById(todoCreateRequestDto
+                .userId()).orElseThrow(() -> new InvalidRequestException("user not found"));
 
         Todo newTodo = Todo.create(
                 todoCreateRequestDto.username(),
@@ -56,7 +58,8 @@ public class TodoServiceimpl implements TodoService {
     @Override
     public TodoFindResponseDto findById(Long todoId) {
 
-        Todo foundTodo = todoRepository.findByIdOrElseThrow(todoId);
+        Todo foundTodo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new InvalidRequestException("Todo not found"));
         return new TodoFindResponseDto(foundTodo);
     }
 
@@ -64,23 +67,25 @@ public class TodoServiceimpl implements TodoService {
     @Override
     @Transactional // Dirty Checking 작동을 위한 어노테이션.
     public TodoModifyResponseDto modifyTodo(
-            Long id,
+            Long todoId,
             String title,
             String contents
     ) {
 
-        Todo findByIdFromModifyTodo = todoRepository.findByIdOrElseThrow(id);
-        findByIdFromModifyTodo.setTitle(title);
-        findByIdFromModifyTodo.setContents(contents);
+        Todo foundTodo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+        foundTodo.setTitle(title);
+        foundTodo.setContents(contents);
 
-        return new TodoModifyResponseDto(findByIdFromModifyTodo);
+        return new TodoModifyResponseDto(foundTodo);
     }
 
     // 5. todo DELETE
     @Override
-    public void deleteTodo(Long id) {
+    public void deleteTodo(Long todoId) {
 
-        todoRepository.findByIdOrElseThrow(id);
-        todoRepository.deleteById(id);
+        Todo foundTodo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+        todoRepository.deleteById(todoId);
     }
 }
