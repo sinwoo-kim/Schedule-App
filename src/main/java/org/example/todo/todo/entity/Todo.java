@@ -41,4 +41,9 @@ public class Todo extends BaseEntity {
     public static Todo create(String username, String title, String contents) {
         return new Todo(username, title, contents);
     }
+
+    public void update(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
 }

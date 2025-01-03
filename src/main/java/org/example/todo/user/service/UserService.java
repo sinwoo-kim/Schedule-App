@@ -3,6 +3,7 @@ package org.example.todo.user.service;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.common.InvalidRequestException;
 import org.example.todo.config.PasswordEncoder;
 import org.example.todo.user.dto.request.LoginRequestDto;
 import org.example.todo.user.dto.request.SignUpRequestDto;
@@ -54,8 +55,7 @@ public class UserService {
         // dto -> User 변환 로직 구현
         User loginRequest = User.toEntityFromLoginRequestDto(loginRequestDto);
         // 사용자 조회
-        User findLoginUser = userRepository.findByEmailOrElseThrow(loginRequest.getEmail());
-        log.info("findLoginUser: {}" + findLoginUser);
+        User findLoginUser = userRepository.findByEmail(loginRequest.getEmail());
 
         if(!passwordEncoder.matches(loginRequest.getPassword(),findLoginUser.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
@@ -70,24 +70,26 @@ public class UserService {
     }
 
     // READ :: FIND USER BY ID
-    public UserResponseDto findUser(Long id) {
-        User findByIdFromFindUser = userRepository.findByIdOrElseThrow(id);
-        return new UserResponseDto(findByIdFromFindUser);
+    public UserResponseDto findUser(Long userId) {
+        User foundUser = userRepository
+                .findById(userId).orElseThrow(() -> new InvalidRequestException("user not found"));
+        return new UserResponseDto(foundUser);
     }
 
     // MODIFY
     @Transactional
-    public UserResponseDto modifyUser(Long id, String name, String email) {
-        User findByIdFromModifyUser = userRepository.findByIdOrElseThrow(id);
-        findByIdFromModifyUser.setUsername(name);
-        findByIdFromModifyUser.setEmail(email);
+    public UserResponseDto modifyUser(Long userId, String username, String email) {
+        User foundUser = userRepository
+                .findById(userId).orElseThrow(() -> new InvalidRequestException("user not found"));
+        foundUser.update(username, email);
 
-        return new UserResponseDto(findByIdFromModifyUser);
+        return new UserResponseDto(foundUser);
     }
 
     // DELETE
-    public void deleteUser(Long id) {
-        User findByIdFromDeleteUser = userRepository.findByIdOrElseThrow(id);
-        userRepository.deleteById(id);
+    public void deleteUser(Long userId) {
+        User foundUser = userRepository
+                .findById(userId).orElseThrow(() -> new InvalidRequestException("user not found"));
+        userRepository.deleteById(userId);
     }
 }

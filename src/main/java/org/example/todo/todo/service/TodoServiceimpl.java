@@ -71,11 +71,10 @@ public class TodoServiceimpl implements TodoService {
             String title,
             String contents
     ) {
-
         Todo foundTodo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
-        foundTodo.setTitle(title);
-        foundTodo.setContents(contents);
+
+        foundTodo.update(title, contents);
 
         return new TodoModifyResponseDto(foundTodo);
     }
