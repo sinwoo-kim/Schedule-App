@@ -2,6 +2,7 @@ package org.example.todo.todo.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.common.ApiResponse;
 import org.example.todo.todo.dto.request.TodoCreateRequestDto;
 import org.example.todo.todo.dto.request.TodoModifyRequestDto;
 import org.example.todo.todo.dto.response.TodoCreateResponseDto;
@@ -25,11 +26,12 @@ public class TodoController {
 
     // CREATE TODO
     @PostMapping
-    public ResponseEntity<TodoCreateResponseDto> createTodoAPI(
+    public ResponseEntity<ApiResponse<TodoCreateResponseDto>> createTodoAPI(
             @RequestBody TodoCreateRequestDto todoCreateRequestDto
     ) {
         TodoCreateResponseDto todoCreateResponseDto = todoService.createTodo(todoCreateRequestDto);
-        return new ResponseEntity<>((todoCreateResponseDto), HttpStatus.CREATED);
+        ApiResponse apiResponse = ApiResponse.success(HttpStatus.CREATED,"created", todoCreateResponseDto);
+        return new ResponseEntity<ApiResponse<TodoCreateResponseDto>>(apiResponse, HttpStatus.CREATED);
     }
 
     // READ TODO ALL
