@@ -27,6 +27,6 @@ public class LoginResponseDto {
      * @return 생성된 LoginResponseDto 객체
      */
     public static LoginResponseDto of(User user) {
-        return new LoginResponseDto(user.getUserId(), user.getEmail(), user.getUsername());
+        return new LoginResponseDto(user.getUserId(), user.getEmail(), user.getName());
     }
 }

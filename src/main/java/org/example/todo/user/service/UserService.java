@@ -4,17 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.common.exception.InvalidRequestException;
 import org.example.todo.config.PasswordEncoder;
-import org.example.todo.user.dto.request.LoginRequestDto;
-import org.example.todo.user.dto.request.SignUpRequestDto;
-import org.example.todo.user.dto.response.LoginResponseDto;
-import org.example.todo.user.dto.response.SignUpResponseDto;
 import org.example.todo.user.dto.response.UserResponseDto;
 import org.example.todo.user.entity.User;
 import org.example.todo.user.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,43 +22,23 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     UserRepository userRepository;
 
-    /**
-     * SIGN UP 메서드
-     * @param signUpRequestDto
-     * @return Dto 변환 로직을 사용
-     */
-    @Transactional
-    public SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto) {
-        // 유니크 값 유효성 검증
-
-        // 비밀번호 암호화
-        String rawPassword = signUpRequestDto.getPassword();
-        String encodedPassword = passwordEncoder.encode(rawPassword);
-        signUpRequestDto.setPassword(encodedPassword);
-
-        // Dto 변환 로직 사용
-        User newUser = User.createFromSignUpDto(signUpRequestDto);
-        User savedUser = userRepository.save(newUser);
-        return SignUpResponseDto.of(savedUser);
-    }
-
-    /**
-     * LOGIN 메서드
-     * @param loginRequestDto
-     * @return DTO 변환 로직을 사용
-     */
-    @Transactional
-    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-        // dto -> User 변환 로직 구현
-        User loginRequest = User.toEntityFromLoginRequestDto(loginRequestDto);
-        // 사용자 조회
-        User foundUser = userRepository.findByEmail(loginRequest.getEmail());
-
-        if(!passwordEncoder.matches(loginRequest.getPassword(),foundUser.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
-        }
-        return LoginResponseDto.of(foundUser);
-    }
+//    /**
+//     * LOGIN 메서드
+//     * @param loginRequestDto
+//     * @return DTO 변환 로직을 사용
+//     */
+//    @Transactional
+//    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+//        // dto -> User 변환 로직 구현
+//        User loginRequest = User.toEntityFromLoginRequestDto(loginRequestDto);
+//        // 사용자 조회
+//        Boolean foundUser = userRepository.existsByEmail(loginRequest.getEmail());
+//
+//        if(!passwordEncoder.matches(loginRequest.getPassword(),foundUser.getPassword())) {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+//        }
+//        return LoginResponseDto.of(foundUser);
+//    }
 
     // READ :: ALL
     public List<UserResponseDto> findUsers() {

@@ -1,11 +1,8 @@
 package org.example.todo.user.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.user.dto.request.SignUpRequestDto;
 import org.example.todo.user.dto.request.UserRequestDto;
-import org.example.todo.user.dto.response.SignUpResponseDto;
 import org.example.todo.user.dto.response.UserResponseDto;
 import org.example.todo.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -21,14 +18,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
-    // 1. CREATE USER
-    @PostMapping("/signup")
-    public ResponseEntity<SignUpResponseDto> signUp(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
-        log.info("signUp을 실행합니다.");
-        SignUpResponseDto signedUp = userService.signUp(signUpRequestDto);
-        return new ResponseEntity<>(signedUp, HttpStatus.CREATED);
-    }
 
     // 2. READ USERS ALL
     @GetMapping()

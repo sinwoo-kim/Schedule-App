@@ -1,6 +1,7 @@
 package org.example.todo.config;
 
 import org.example.todo.common.ApiResponse;
+import org.example.todo.common.exception.DataAlreadyExistsException;
 import org.example.todo.common.exception.InvalidRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> invalidRequestException(InvalidRequestException ex) {
         ApiResponse<Object> errorResponse = ApiResponse.error(HttpStatus.NOT_FOUND, ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<?>> dataAlreadyExistsException(DataAlreadyExistsException ex) {
+        ApiResponse<Object> errorResponse = ApiResponse.error(HttpStatus.CONFLICT, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
 }

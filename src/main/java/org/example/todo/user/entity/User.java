@@ -2,9 +2,9 @@ package org.example.todo.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.example.todo.auth.dto.request.SignUpRequestDto;
 import org.example.todo.common.BaseEntity;
 import org.example.todo.user.dto.request.LoginRequestDto;
-import org.example.todo.user.dto.request.SignUpRequestDto;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -24,15 +24,15 @@ public class User extends BaseEntity {
     private String password;
 
     @Column(nullable = false)
-    private String username;
+    private String name;
 
     @CreatedDate
     private LocalDateTime createAt;
 
-    private User(String email, String password, String username) {
+    private User(String email, String password, String name) {
         this.email = email;
         this.password = password;
-        this.username = username;
+        this.name = name;
     }
 
     private User(String email, String password) {
@@ -45,7 +45,7 @@ public class User extends BaseEntity {
 
     // signUp dto -> User Entity
     public static User createFromSignUpDto(SignUpRequestDto signUpRequestDto) {
-        return new User(signUpRequestDto.getEmail(), signUpRequestDto.getPassword(), signUpRequestDto.getUsername());
+        return new User(signUpRequestDto.email(), signUpRequestDto.password(), signUpRequestDto.name());
     }
 
     // login dto -> User Entity
@@ -54,7 +54,7 @@ public class User extends BaseEntity {
     }
 
     public void update(String username, String email) {
-        this.username = username;
+        this.name = username;
         this.email = email;
     }
 }
