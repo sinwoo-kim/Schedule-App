@@ -23,7 +23,7 @@ public class AuthService {
     public SignUpResponseDto signUp(SignUpRequestDto requestDto) {
 
         // 비즈니스 규칙 : 이메일이 중복되어서는 안된다.
-        if(userRepository.existsByEmail(requestDto.email())) {
+        if (userRepository.existsByEmail(requestDto.email())) {
             throw new DataAlreadyExistsException("email already exists");
         }
         // 비밀번호 암호화
@@ -32,7 +32,7 @@ public class AuthService {
         // get 권한
 
         // 생성
-        User newUser = User.createFromSignUpDto(requestDto);
+        User newUser = User.create(requestDto.email(), requestDto.password(), requestDto.name());
 
         // 저장
         User savedUser = userRepository.save(newUser);

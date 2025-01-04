@@ -23,7 +23,7 @@ public class TodoController {
 
     private final TodoService todoService;
 
-    // CREATE TODO
+    // 1. CREATE API
     @PostMapping
     public ResponseEntity<ApiResponse<CreateTodoResponseDto>> createTodoAPI(
             @RequestBody CreateTodoRequestDto todoCreateRequestDto
@@ -33,13 +33,15 @@ public class TodoController {
         return new ResponseEntity<ApiResponse<CreateTodoResponseDto>>(apiResponse, HttpStatus.CREATED);
     }
 
-    // READ TODO ALL
+    // 2. GET 투두 LIST API
     @GetMapping
-    public List<ReadTodoResponseDto> getTodoListAPI() {
-        return todoService.getTodoList();
+    public ResponseEntity<ApiResponse<List<ReadTodoResponseDto>>> getTodoListAPI() {
+        List<ReadTodoResponseDto> response = todoService.getTodoList();
+        ApiResponse apiResponse = ApiResponse.success(HttpStatus.OK, "Got List", response);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    // REAL TODO SELECT
+    // 3. GET 투두 API
     @GetMapping("/{todoId}")
     public ResponseEntity<ReadTodoResponseDto> getTodoAPI(
             @PathVariable("todoId") Long id
@@ -48,7 +50,7 @@ public class TodoController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // MODIFIY TODO ( Title, Contents )
+    // 4. UPDATE 투두 API
     @PatchMapping("/{todoId}")
     public ResponseEntity<UpdateTodoResponseDto> updateTodoAPI(
             @PathVariable("todoId") Long id,
@@ -57,15 +59,15 @@ public class TodoController {
         return new ResponseEntity<>(
                 todoService.updateTodo(
                         id,
-                        requestDto.getTitle(),
-                        requestDto.getContents()
+                        requestDto.title(),
+                        requestDto.contents()
                 ),
                 HttpStatus.OK
         );
     }
 
 
-    // DELETE TODO SELECT
+    // 5. DELETE 투두 API
     @DeleteMapping("/{todoId}")
     public ResponseEntity<String> deleteTodoAPI(
             @PathVariable("todoId") Long id
