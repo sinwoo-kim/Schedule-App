@@ -28,8 +28,8 @@ public class TodoController {
     public ResponseEntity<ApiResponse<CreateTodoResponseDto>> createTodoAPI(
             @RequestBody CreateTodoRequestDto todoCreateRequestDto
     ) {
-        CreateTodoResponseDto createResponse = todoService.createTodo(todoCreateRequestDto);
-        ApiResponse apiResponse = ApiResponse.success(HttpStatus.CREATED, "created", createResponse);
+        CreateTodoResponseDto response = todoService.createTodo(todoCreateRequestDto);
+        ApiResponse apiResponse = ApiResponse.success(HttpStatus.CREATED, "created", response);
         return new ResponseEntity<ApiResponse<CreateTodoResponseDto>>(apiResponse, HttpStatus.CREATED);
     }
 
@@ -44,8 +44,8 @@ public class TodoController {
     public ResponseEntity<ReadTodoResponseDto> getTodoAPI(
             @PathVariable("todoId") Long id
     ) {
-        ReadTodoResponseDto Response = todoService.getTodo(id);
-        return new ResponseEntity<>(Response, HttpStatus.OK);
+        ReadTodoResponseDto response = todoService.getTodo(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // MODIFIY TODO ( Title, Contents )

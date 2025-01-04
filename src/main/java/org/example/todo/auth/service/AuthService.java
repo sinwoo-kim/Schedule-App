@@ -19,6 +19,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     // jwt
 
+    @Transactional
     public SignUpResponseDto signUp(SignUpRequestDto requestDto) {
 
         // 비즈니스 규칙 : 이메일이 중복되어서는 안된다.

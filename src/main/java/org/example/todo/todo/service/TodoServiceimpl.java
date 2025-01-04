@@ -52,7 +52,6 @@ public class TodoServiceimpl implements TodoService {
                                           t.getTitle(),
                                           t.getContents()
                                   )
-
         );
     }
 
