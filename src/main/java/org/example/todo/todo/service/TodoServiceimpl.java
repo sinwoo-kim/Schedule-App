@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -58,11 +57,11 @@ public class TodoServiceimpl implements TodoService {
     // 2. todo READ :: ALL
     @Override
     public List<ReadTodoResponseDto> getTodoList() {
-
         List<Todo> todoList = todoRepository.findAll();
-        return todoList.stream()
-                       .map(ReadTodoResponseDto::toDto)
-                       .collect(Collectors.toList());
+        return DtoMapper.toDtoList(
+                todoList,
+                ReadTodoResponseDto::toDto
+        );
     }
 
     // 3. todo READ :: SELECT
@@ -87,7 +86,13 @@ public class TodoServiceimpl implements TodoService {
 
         foundTodo.update(title, contents);
 
-        return new UpdateTodoResponseDto(foundTodo);
+        return DtoMapper.mapToDto(foundTodo, t -> new UpdateTodoResponseDto(
+                t.getTodoId(),
+                t.getUsername(),
+                t.getTitle(),
+                t.getContents(),
+                t.getUpdatedAt()
+        ));
     }
 
     // 5. todo DELETE
