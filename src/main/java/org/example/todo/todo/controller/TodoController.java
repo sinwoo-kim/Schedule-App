@@ -44,8 +44,8 @@ public class TodoController {
     public ResponseEntity<ReadTodoResponseDto> getTodoAPI(
             @PathVariable("todoId") Long id
     ) {
-        ReadTodoResponseDto findTodo = todoService.getTodo(id);
-        return new ResponseEntity<>(findTodo, HttpStatus.OK);
+        ReadTodoResponseDto Response = todoService.getTodo(id);
+        return new ResponseEntity<>(Response, HttpStatus.OK);
     }
 
     // MODIFIY TODO ( Title, Contents )

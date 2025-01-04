@@ -21,29 +21,29 @@ public class UserController {
 
     // 2. READ USERS ALL
     @GetMapping()
-    public ResponseEntity<List<UserResponseDto>> findUsersAPI() {
+    public ResponseEntity<List<UserResponseDto>> getUserListAPI() {
         log.info("findUsersAPI를 실행합니다.");
-        List<UserResponseDto> users = userService.findUsers();
-        return ResponseEntity.ok(users);
+        List<UserResponseDto> Response = userService.getUserList();
+        return ResponseEntity.ok(Response);
     }
 
     // 3. READ SELECT USER
     @GetMapping("{userId}")
-    public ResponseEntity<UserResponseDto> findUserAPI(@PathVariable("userId") Long id) {
+    public ResponseEntity<UserResponseDto> getUserAPI(@PathVariable("userId") Long id) {
         log.info("findUserAPI를 실행합니다.");
-        UserResponseDto foundUser = userService.findUser(id);
-        return new ResponseEntity<>(foundUser, HttpStatus.OK);
+        UserResponseDto Response = userService.getUser(id);
+        return new ResponseEntity<>(Response, HttpStatus.OK);
     }
 
     // 4. MODIFY USER (name, email)
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> modifyUserAPI(
+    public ResponseEntity<UserResponseDto> updateUserAPI(
             @PathVariable("userId") Long id,
             @RequestBody UserRequestDto requestDto
     ) {
         log.info("modifyUserAPI를 실행합니다.");
-        UserResponseDto modifyUser = userService.modifyUser(id, requestDto.getName(), requestDto.getEmail());
-        return new ResponseEntity<>(modifyUser, HttpStatus.OK);
+        UserResponseDto Response = userService.updateUser(id, requestDto.getName(), requestDto.getEmail());
+        return new ResponseEntity<>(Response, HttpStatus.OK);
     }
 
     // 5. DELETE USER

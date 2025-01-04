@@ -22,46 +22,24 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     UserRepository userRepository;
 
-//    /**
-//     * LOGIN 메서드
-//     * @param loginRequestDto
-//     * @return DTO 변환 로직을 사용
-//     */
-//    @Transactional
-//    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-//        // dto -> User 변환 로직 구현
-//        User loginRequest = User.toEntityFromLoginRequestDto(loginRequestDto);
-//        // 사용자 조회
-//        Boolean foundUser = userRepository.existsByEmail(loginRequest.getEmail());
-//
-//        if(!passwordEncoder.matches(loginRequest.getPassword(),foundUser.getPassword())) {
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
-//        }
-//        return LoginResponseDto.of(foundUser);
-//    }
-
     // READ :: ALL
-    public List<UserResponseDto> findUsers() {
-        List<User> userList = userRepository.findAll();
-        return userList.stream()
-                       .map(UserResponseDto::new)
-                       .collect(Collectors.toList());
+    public List<UserResponseDto> getUserList() {
+        List<User> foundUserList = userRepository.findAll();
+        return foundUserList.stream()
+                            .map(UserResponseDto::new)
+                            .collect(Collectors.toList());
     }
 
     // READ :: FIND USER BY ID
-    public UserResponseDto findUser(Long userId) {
-        User foundUser = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new InvalidRequestException("user not found"));
+    public UserResponseDto getUser(Long userId) {
+        User foundUser = findByIdOrElseThrow(userId);
         return new UserResponseDto(foundUser);
     }
 
     // MODIFY
     @Transactional
-    public UserResponseDto modifyUser(Long userId, String username, String email) {
-        User foundUser = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new InvalidRequestException("user not found"));
+    public UserResponseDto updateUser(Long userId, String username, String email) {
+        User foundUser = findByIdOrElseThrow(userId);
         foundUser.update(username, email);
 
         return new UserResponseDto(foundUser);
@@ -70,9 +48,12 @@ public class UserService {
     // DELETE
     @Transactional
     public void deleteUser(Long userId) {
-        User foundUser = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new InvalidRequestException("user not found"));
+        User foundUser = findByIdOrElseThrow(userId);
         userRepository.deleteById(userId);
+    }
+
+    private User findByIdOrElseThrow(Long userId) {
+        return userRepository.findById(userId)
+                             .orElseThrow(() -> new InvalidRequestException("user not found"));
     }
 }
