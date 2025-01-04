@@ -3,12 +3,11 @@ package org.example.todo.todo.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.common.ApiResponse;
-import org.example.todo.todo.dto.request.TodoCreateRequestDto;
-import org.example.todo.todo.dto.request.TodoModifyRequestDto;
-import org.example.todo.todo.dto.response.TodoCreateResponseDto;
-import org.example.todo.todo.dto.response.TodoFindResponseDto;
-import org.example.todo.todo.dto.response.TodoModifyResponseDto;
-import org.example.todo.todo.dto.response.TodosResponseDto;
+import org.example.todo.todo.dto.request.CreateTodoRequestDto;
+import org.example.todo.todo.dto.request.UpdateTodoRequestDto;
+import org.example.todo.todo.dto.response.CreateTodoResponseDto;
+import org.example.todo.todo.dto.response.ReadTodoResponseDto;
+import org.example.todo.todo.dto.response.UpdateTodoResponseDto;
 import org.example.todo.todo.service.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,37 +25,37 @@ public class TodoController {
 
     // CREATE TODO
     @PostMapping
-    public ResponseEntity<ApiResponse<TodoCreateResponseDto>> createTodoAPI(
-            @RequestBody TodoCreateRequestDto todoCreateRequestDto
+    public ResponseEntity<ApiResponse<CreateTodoResponseDto>> createTodoAPI(
+            @RequestBody CreateTodoRequestDto todoCreateRequestDto
     ) {
-        TodoCreateResponseDto todoCreateResponseDto = todoService.createTodo(todoCreateRequestDto);
-        ApiResponse apiResponse = ApiResponse.success(HttpStatus.CREATED,"created", todoCreateResponseDto);
-        return new ResponseEntity<ApiResponse<TodoCreateResponseDto>>(apiResponse, HttpStatus.CREATED);
+        CreateTodoResponseDto createResponse = todoService.createTodo(todoCreateRequestDto);
+        ApiResponse apiResponse = ApiResponse.success(HttpStatus.CREATED, "created", createResponse);
+        return new ResponseEntity<ApiResponse<CreateTodoResponseDto>>(apiResponse, HttpStatus.CREATED);
     }
 
     // READ TODO ALL
     @GetMapping
-    public List<TodosResponseDto> findTodosAPI() {
-        return todoService.findTodos();
+    public List<ReadTodoResponseDto> getTodoListAPI() {
+        return todoService.getTodoList();
     }
 
     // REAL TODO SELECT
     @GetMapping("/{todoId}")
-    public ResponseEntity<TodoFindResponseDto> findTodoAPI(
+    public ResponseEntity<ReadTodoResponseDto> getTodoAPI(
             @PathVariable("todoId") Long id
     ) {
-        TodoFindResponseDto findTodo = todoService.findById(id);
+        ReadTodoResponseDto findTodo = todoService.getTodo(id);
         return new ResponseEntity<>(findTodo, HttpStatus.OK);
     }
 
     // MODIFIY TODO ( Title, Contents )
     @PatchMapping("/{todoId}")
-    public ResponseEntity<TodoModifyResponseDto> modifyTodoAPI(
+    public ResponseEntity<UpdateTodoResponseDto> updateTodoAPI(
             @PathVariable("todoId") Long id,
-            @RequestBody TodoModifyRequestDto requestDto
+            @RequestBody UpdateTodoRequestDto requestDto
     ) {
         return new ResponseEntity<>(
-                todoService.modifyTodo(
+                todoService.updateTodo(
                         id,
                         requestDto.getTitle(),
                         requestDto.getContents()

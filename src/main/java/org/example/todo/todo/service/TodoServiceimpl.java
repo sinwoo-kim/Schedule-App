@@ -4,11 +4,10 @@ package org.example.todo.todo.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.common.exception.InvalidRequestException;
-import org.example.todo.todo.dto.request.TodoCreateRequestDto;
-import org.example.todo.todo.dto.response.TodoCreateResponseDto;
-import org.example.todo.todo.dto.response.TodoFindResponseDto;
-import org.example.todo.todo.dto.response.TodoModifyResponseDto;
-import org.example.todo.todo.dto.response.TodosResponseDto;
+import org.example.todo.todo.dto.request.CreateTodoRequestDto;
+import org.example.todo.todo.dto.response.CreateTodoResponseDto;
+import org.example.todo.todo.dto.response.ReadTodoResponseDto;
+import org.example.todo.todo.dto.response.UpdateTodoResponseDto;
 import org.example.todo.todo.entity.Todo;
 import org.example.todo.todo.repository.TodoRepository;
 import org.example.todo.user.entity.User;
@@ -32,12 +31,13 @@ public class TodoServiceimpl implements TodoService {
     // 1. todo CREATE
     @Transactional
     @Override
-    public TodoCreateResponseDto createTodo(
-            TodoCreateRequestDto todoCreateRequestDto
+    public CreateTodoResponseDto createTodo(
+            CreateTodoRequestDto todoCreateRequestDto
     ) {
         log.info("1. todoService.createTodo() 실행");
         User foundUser = userRepository.findById(todoCreateRequestDto
-                .userId()).orElseThrow(() -> new InvalidRequestException("user not found"));
+                                                         .userId())
+                                       .orElseThrow(() -> new InvalidRequestException("user not found"));
 
         Todo newTodo = Todo.create(
                 todoCreateRequestDto.username(),
@@ -46,40 +46,42 @@ public class TodoServiceimpl implements TodoService {
         );
 
         Todo savedTodo = todoRepository.save(newTodo);
-        return TodoCreateResponseDto.toDto(savedTodo);
+        return CreateTodoResponseDto.toDto(savedTodo);
     }
 
     // 2. todo READ :: ALL
     @Override
-    public List<TodosResponseDto> findTodos() {
+    public List<ReadTodoResponseDto> getTodoList() {
 
         List<Todo> todoList = todoRepository.findAll();
-        return todoList.stream().map(TodosResponseDto::new).collect(Collectors.toList());
+        return todoList.stream()
+                       .map(ReadTodoResponseDto::new)
+                       .collect(Collectors.toList());
     }
 
     // 3. todo READ :: SELECT
     @Override
-    public TodoFindResponseDto findById(Long todoId) {
+    public ReadTodoResponseDto getTodo(Long todoId) {
 
         Todo foundTodo = todoRepository.findById(todoId)
-                .orElseThrow(() -> new InvalidRequestException("Todo not found"));
-        return new TodoFindResponseDto(foundTodo);
+                                       .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+        return new ReadTodoResponseDto(foundTodo);
     }
 
     // 4. todo MODIFY :: TITLE, CONTENTS
     @Override
     @Transactional // Dirty Checking 작동을 위한 어노테이션.
-    public TodoModifyResponseDto modifyTodo(
+    public UpdateTodoResponseDto updateTodo(
             Long todoId,
             String title,
             String contents
     ) {
         Todo foundTodo = todoRepository.findById(todoId)
-                .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+                                       .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
         foundTodo.update(title, contents);
 
-        return new TodoModifyResponseDto(foundTodo);
+        return new UpdateTodoResponseDto(foundTodo);
     }
 
     // 5. todo DELETE
@@ -88,7 +90,7 @@ public class TodoServiceimpl implements TodoService {
     public void deleteTodo(Long todoId) {
 
         Todo foundTodo = todoRepository.findById(todoId)
-                .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+                                       .orElseThrow(() -> new InvalidRequestException("Todo not found"));
         todoRepository.deleteById(todoId);
     }
 }

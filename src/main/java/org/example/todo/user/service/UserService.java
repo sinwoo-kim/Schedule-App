@@ -43,13 +43,16 @@ public class UserService {
     // READ :: ALL
     public List<UserResponseDto> findUsers() {
         List<User> userList = userRepository.findAll();
-        return userList.stream().map(UserResponseDto::new).collect(Collectors.toList());
+        return userList.stream()
+                       .map(UserResponseDto::new)
+                       .collect(Collectors.toList());
     }
 
     // READ :: FIND USER BY ID
     public UserResponseDto findUser(Long userId) {
         User foundUser = userRepository
-                .findById(userId).orElseThrow(() -> new InvalidRequestException("user not found"));
+                .findById(userId)
+                .orElseThrow(() -> new InvalidRequestException("user not found"));
         return new UserResponseDto(foundUser);
     }
 
@@ -57,7 +60,8 @@ public class UserService {
     @Transactional
     public UserResponseDto modifyUser(Long userId, String username, String email) {
         User foundUser = userRepository
-                .findById(userId).orElseThrow(() -> new InvalidRequestException("user not found"));
+                .findById(userId)
+                .orElseThrow(() -> new InvalidRequestException("user not found"));
         foundUser.update(username, email);
 
         return new UserResponseDto(foundUser);
@@ -67,7 +71,8 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId) {
         User foundUser = userRepository
-                .findById(userId).orElseThrow(() -> new InvalidRequestException("user not found"));
+                .findById(userId)
+                .orElseThrow(() -> new InvalidRequestException("user not found"));
         userRepository.deleteById(userId);
     }
 }

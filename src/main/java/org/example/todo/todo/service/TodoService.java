@@ -1,22 +1,21 @@
 package org.example.todo.todo.service;
 
 
-import org.example.todo.todo.dto.request.TodoCreateRequestDto;
-import org.example.todo.todo.dto.response.TodoCreateResponseDto;
-import org.example.todo.todo.dto.response.TodoFindResponseDto;
-import org.example.todo.todo.dto.response.TodoModifyResponseDto;
-import org.example.todo.todo.dto.response.TodosResponseDto;
+import org.example.todo.todo.dto.request.CreateTodoRequestDto;
+import org.example.todo.todo.dto.response.CreateTodoResponseDto;
+import org.example.todo.todo.dto.response.ReadTodoResponseDto;
+import org.example.todo.todo.dto.response.UpdateTodoResponseDto;
 
 import java.util.List;
 
 public interface TodoService {
-    TodoCreateResponseDto createTodo(TodoCreateRequestDto todoCreateRequestDto);
+    CreateTodoResponseDto createTodo(CreateTodoRequestDto todoCreateRequestDto);
 
-    List<TodosResponseDto> findTodos();
+    List<ReadTodoResponseDto> getTodoList();
 
-    TodoFindResponseDto findById(Long id);
+    ReadTodoResponseDto getTodo(Long id);
 
-    TodoModifyResponseDto modifyTodo(Long id, String title, String contents);
+    UpdateTodoResponseDto updateTodo(Long id, String title, String contents);
 
     void deleteTodo(Long id);
 }

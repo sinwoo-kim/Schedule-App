@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TodoModifyRequestDto {
+public class UpdateTodoRequestDto {
 
     private Long userId;
     private String username;

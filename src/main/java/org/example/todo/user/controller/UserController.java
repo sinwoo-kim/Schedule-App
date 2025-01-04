@@ -37,8 +37,10 @@ public class UserController {
 
     // 4. MODIFY USER (name, email)
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> modifyUserAPI(@PathVariable("userId") Long id,
-                                                         @RequestBody UserRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> modifyUserAPI(
+            @PathVariable("userId") Long id,
+            @RequestBody UserRequestDto requestDto
+    ) {
         log.info("modifyUserAPI를 실행합니다.");
         UserResponseDto modifyUser = userService.modifyUser(id, requestDto.getName(), requestDto.getEmail());
         return new ResponseEntity<>(modifyUser, HttpStatus.OK);
