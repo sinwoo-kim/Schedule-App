@@ -32,14 +32,16 @@ public class UserService {
 
     // READ :: FIND USER BY ID
     public UserResponseDto getUser(Long userId) {
-        User foundUser = findByIdOrElseThrow(userId);
+        User foundUser = userRepository.findById(userId)
+                                       .orElseThrow(() -> new InvalidRequestException("user not found"));
         return UserResponseDto.toDto(foundUser);
     }
 
     // MODIFY
     @Transactional
     public UserResponseDto updateUser(Long userId, String username, String email) {
-        User foundUser = findByIdOrElseThrow(userId);
+        User foundUser = userRepository.findById(userId)
+                                       .orElseThrow(() -> new InvalidRequestException("user not found"));
         foundUser.update(username, email);
         return UserResponseDto.toDto(foundUser);
     }
@@ -47,12 +49,8 @@ public class UserService {
     // DELETE
     @Transactional
     public void deleteUser(Long userId) {
-        User foundUser = findByIdOrElseThrow(userId);
+        User foundUser = userRepository.findById(userId)
+                                       .orElseThrow(() -> new InvalidRequestException("user not found"));
         userRepository.deleteById(userId);
-    }
-
-    private User findByIdOrElseThrow(Long userId) {
-        return userRepository.findById(userId)
-                             .orElseThrow(() -> new InvalidRequestException("user not found"));
     }
 }
