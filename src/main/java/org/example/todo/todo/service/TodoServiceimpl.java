@@ -3,6 +3,7 @@ package org.example.todo.todo.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.common.DtoMapper;
 import org.example.todo.common.exception.InvalidRequestException;
 import org.example.todo.todo.dto.request.CreateTodoRequestDto;
 import org.example.todo.todo.dto.response.CreateTodoResponseDto;
@@ -35,8 +36,7 @@ public class TodoServiceimpl implements TodoService {
             CreateTodoRequestDto todoCreateRequestDto
     ) {
         log.info("1. todoService.createTodo() 실행");
-        User foundUser = userRepository.findById(todoCreateRequestDto
-                                                         .userId())
+        User foundUser = userRepository.findById(todoCreateRequestDto.userId())
                                        .orElseThrow(() -> new InvalidRequestException("user not found"));
 
         Todo newTodo = Todo.create(
@@ -46,7 +46,14 @@ public class TodoServiceimpl implements TodoService {
         );
 
         Todo savedTodo = todoRepository.save(newTodo);
-        return CreateTodoResponseDto.toDto(savedTodo);
+        return DtoMapper.mapToDto(savedTodo, t -> new CreateTodoResponseDto(
+                                          t.getTodoId(),
+                                          t.getUsername(),
+                                          t.getTitle(),
+                                          t.getContents()
+                                  )
+
+        );
     }
 
     // 2. todo READ :: ALL
@@ -55,7 +62,7 @@ public class TodoServiceimpl implements TodoService {
 
         List<Todo> todoList = todoRepository.findAll();
         return todoList.stream()
-                       .map(ReadTodoResponseDto::new)
+                       .map(ReadTodoResponseDto::toDto)
                        .collect(Collectors.toList());
     }
 
@@ -65,12 +72,12 @@ public class TodoServiceimpl implements TodoService {
 
         Todo foundTodo = todoRepository.findById(todoId)
                                        .orElseThrow(() -> new InvalidRequestException("Todo not found"));
-        return new ReadTodoResponseDto(foundTodo);
+        return ReadTodoResponseDto.toDto(foundTodo);
     }
 
     // 4. todo MODIFY :: TITLE, CONTENTS
     @Override
-    @Transactional // Dirty Checking 작동을 위한 어노테이션.
+    @Transactional
     public UpdateTodoResponseDto updateTodo(
             Long todoId,
             String title,
