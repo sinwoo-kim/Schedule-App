@@ -2,7 +2,8 @@ package org.example.todo.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.user.dto.request.UserRequestDto;
+import org.example.todo.user.dto.request.UpdateUserRequestDto;
+import org.example.todo.user.dto.response.UpdateUserResponseDto;
 import org.example.todo.user.dto.response.UserResponseDto;
 import org.example.todo.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -37,12 +38,12 @@ public class UserController {
 
     // 3. UPDATE USER
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> updateUserAPI(
-            @PathVariable("userId") Long id,
-            @RequestBody UserRequestDto requestDto
+    public ResponseEntity<UpdateUserResponseDto> updateUserAPI(
+            @PathVariable("userId") Long userId,
+            @RequestBody UpdateUserRequestDto updateUserRequestDto
     ) {
         log.info("modifyUserAPI를 실행합니다.");
-        UserResponseDto Response = userService.updateUser(id, requestDto.name(), requestDto.email());
+        UpdateUserResponseDto Response = userService.updateUser(userId, updateUserRequestDto);
         return new ResponseEntity<>(Response, HttpStatus.OK);
     }
 

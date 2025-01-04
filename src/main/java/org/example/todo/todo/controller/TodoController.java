@@ -6,6 +6,7 @@ import org.example.todo.common.ApiResponse;
 import org.example.todo.todo.dto.request.CreateTodoRequestDto;
 import org.example.todo.todo.dto.request.UpdateTodoRequestDto;
 import org.example.todo.todo.dto.response.CreateTodoResponseDto;
+import org.example.todo.todo.dto.response.ReadTodoListResponseDto;
 import org.example.todo.todo.dto.response.ReadTodoResponseDto;
 import org.example.todo.todo.dto.response.UpdateTodoResponseDto;
 import org.example.todo.todo.service.TodoService;
@@ -35,8 +36,8 @@ public class TodoController {
 
     // 2. GET 투두 LIST API
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ReadTodoResponseDto>>> getTodoListAPI() {
-        List<ReadTodoResponseDto> response = todoService.getTodoList();
+    public ResponseEntity<ApiResponse<List<ReadTodoListResponseDto>>> getTodoListAPI() {
+        List<ReadTodoListResponseDto> response = todoService.getTodoList();
         ApiResponse apiResponse = ApiResponse.success(HttpStatus.OK, "Got List", response);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }

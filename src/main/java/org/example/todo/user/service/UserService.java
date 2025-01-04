@@ -3,7 +3,8 @@ package org.example.todo.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.common.exception.InvalidRequestException;
-import org.example.todo.config.PasswordEncoder;
+import org.example.todo.user.dto.request.UpdateUserRequestDto;
+import org.example.todo.user.dto.response.UpdateUserResponseDto;
 import org.example.todo.user.dto.response.UserResponseDto;
 import org.example.todo.user.entity.User;
 import org.example.todo.user.repository.UserRepository;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UserService {
 
-    private final PasswordEncoder passwordEncoder;
     UserRepository userRepository;
 
     // 1. READ :: ALL
@@ -39,11 +39,11 @@ public class UserService {
 
     // 3. UPDATE
     @Transactional
-    public UserResponseDto updateUser(Long userId, String username, String email) {
+    public UpdateUserResponseDto updateUser(Long userId, UpdateUserRequestDto updateUserRequestDto) {
         User foundUser = userRepository.findById(userId)
                                        .orElseThrow(() -> new InvalidRequestException("user not found"));
-        foundUser.update(username, email);
-        return UserResponseDto.toDto(foundUser);
+        foundUser.update(updateUserRequestDto.username());
+        return UpdateUserResponseDto.toDto(foundUser);
     }
 
     // 4. DELETE

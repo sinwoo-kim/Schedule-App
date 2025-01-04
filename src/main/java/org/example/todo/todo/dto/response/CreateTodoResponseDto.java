@@ -17,5 +17,5 @@ public record CreateTodoResponseDto(
                 todo.getContents()
         );
     }
-
 }
+

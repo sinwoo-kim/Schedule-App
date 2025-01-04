@@ -3,10 +3,10 @@ package org.example.todo.todo.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.common.DtoMapper;
 import org.example.todo.common.exception.InvalidRequestException;
 import org.example.todo.todo.dto.request.CreateTodoRequestDto;
 import org.example.todo.todo.dto.response.CreateTodoResponseDto;
+import org.example.todo.todo.dto.response.ReadTodoListResponseDto;
 import org.example.todo.todo.dto.response.ReadTodoResponseDto;
 import org.example.todo.todo.dto.response.UpdateTodoResponseDto;
 import org.example.todo.todo.entity.Todo;
@@ -28,7 +28,7 @@ public class TodoServiceimpl implements TodoService {
     private final UserRepository userRepository;
 
 
-    // 1. todo CREATE
+    // 1. CREATE
     @Transactional
     @Override
     public CreateTodoResponseDto createTodo(
@@ -45,35 +45,31 @@ public class TodoServiceimpl implements TodoService {
         );
 
         Todo savedTodo = todoRepository.save(newTodo);
-        return DtoMapper.mapToDto(savedTodo, t -> new CreateTodoResponseDto(
-                                          t.getTodoId(),
-                                          t.getUsername(),
-                                          t.getTitle(),
-                                          t.getContents()
-                                  )
-        );
+        return CreateTodoResponseDto.toDto(savedTodo);
     }
 
-    // 2. todo READ :: ALL
+    // 2. Find List ALL
     @Override
-    public List<ReadTodoResponseDto> getTodoList() {
+    public List<ReadTodoListResponseDto> getTodoList() {
         List<Todo> todoList = todoRepository.findAll();
-        return DtoMapper.toDtoList(
-                todoList,
-                ReadTodoResponseDto::toDto
-        );
+
+        List<ReadTodoListResponseDto> todoListToDto = todoList
+                .stream()
+                .map(ReadTodoListResponseDto::toDto)
+                .toList();
+
+        return todoListToDto;
     }
 
-    // 3. todo READ :: SELECT
+    // 3. Find
     @Override
     public ReadTodoResponseDto getTodo(Long todoId) {
-
         Todo foundTodo = todoRepository.findById(todoId)
                                        .orElseThrow(() -> new InvalidRequestException("Todo not found"));
         return ReadTodoResponseDto.toDto(foundTodo);
     }
 
-    // 4. todo MODIFY :: TITLE, CONTENTS
+    // 4. UPDATE
     @Override
     @Transactional
     public UpdateTodoResponseDto updateTodo(
@@ -85,17 +81,10 @@ public class TodoServiceimpl implements TodoService {
                                        .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
         foundTodo.update(title, contents);
-
-        return DtoMapper.mapToDto(foundTodo, t -> new UpdateTodoResponseDto(
-                t.getTodoId(),
-                t.getUsername(),
-                t.getTitle(),
-                t.getContents(),
-                t.getUpdatedAt()
-        ));
+        return UpdateTodoResponseDto.toDto(foundTodo);
     }
 
-    // 5. todo DELETE
+    // 5. DELETE
     @Override
     @Transactional
     public void deleteTodo(Long todoId) {
