@@ -22,7 +22,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     UserRepository userRepository;
 
-    // READ :: ALL
+    // 1. READ :: ALL
     public List<UserResponseDto> getUserList() {
         List<User> foundUserList = userRepository.findAll();
         return foundUserList.stream()
@@ -30,14 +30,14 @@ public class UserService {
                             .collect(Collectors.toList());
     }
 
-    // READ :: FIND USER BY ID
+    // 2. READ :: FIND USER BY ID
     public UserResponseDto getUser(Long userId) {
         User foundUser = userRepository.findById(userId)
                                        .orElseThrow(() -> new InvalidRequestException("user not found"));
         return UserResponseDto.toDto(foundUser);
     }
 
-    // MODIFY
+    // 3. UPDATE
     @Transactional
     public UserResponseDto updateUser(Long userId, String username, String email) {
         User foundUser = userRepository.findById(userId)
@@ -46,7 +46,7 @@ public class UserService {
         return UserResponseDto.toDto(foundUser);
     }
 
-    // DELETE
+    // 4. DELETE
     @Transactional
     public void deleteUser(Long userId) {
         User foundUser = userRepository.findById(userId)

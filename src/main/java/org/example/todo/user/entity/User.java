@@ -2,9 +2,7 @@ package org.example.todo.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.example.todo.auth.dto.request.SignUpRequestDto;
 import org.example.todo.common.BaseEntity;
-import org.example.todo.user.dto.request.LoginRequestDto;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -43,14 +41,8 @@ public class User extends BaseEntity {
     public User() {
     }
 
-    // signUp dto -> User Entity
-    public static User createFromSignUpDto(SignUpRequestDto signUpRequestDto) {
-        return new User(signUpRequestDto.email(), signUpRequestDto.password(), signUpRequestDto.name());
-    }
-
-    // login dto -> User Entity
-    public static User toEntityFromLoginRequestDto(LoginRequestDto loginRequestDto) {
-        return new User(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+    public static User create(String email, String password, String name) {
+        return new User(email, password, name);
     }
 
     public void update(String username, String email) {

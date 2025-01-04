@@ -1,16 +1,5 @@
 package org.example.todo.todo.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+public record UpdateTodoRequestDto(Long userId, String username, String title, String contents) {
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class UpdateTodoRequestDto {
-
-    private Long userId;
-    private String username;
-    private String title;
-    private String contents;
 }

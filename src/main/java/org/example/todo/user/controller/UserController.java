@@ -19,7 +19,7 @@ public class UserController {
 
     private final UserService userService;
 
-    // 2. READ USERS ALL
+    // 1. GET USER LIST API
     @GetMapping()
     public ResponseEntity<List<UserResponseDto>> getUserListAPI() {
         log.info("findUsersAPI를 실행합니다.");
@@ -27,7 +27,7 @@ public class UserController {
         return ResponseEntity.ok(Response);
     }
 
-    // 3. READ SELECT USER
+    // 2. GET USER API
     @GetMapping("{userId}")
     public ResponseEntity<UserResponseDto> getUserAPI(@PathVariable("userId") Long id) {
         log.info("findUserAPI를 실행합니다.");
@@ -35,18 +35,18 @@ public class UserController {
         return new ResponseEntity<>(Response, HttpStatus.OK);
     }
 
-    // 4. MODIFY USER (name, email)
+    // 3. UPDATE USER
     @PatchMapping("/{userId}")
     public ResponseEntity<UserResponseDto> updateUserAPI(
             @PathVariable("userId") Long id,
             @RequestBody UserRequestDto requestDto
     ) {
         log.info("modifyUserAPI를 실행합니다.");
-        UserResponseDto Response = userService.updateUser(id, requestDto.getName(), requestDto.getEmail());
+        UserResponseDto Response = userService.updateUser(id, requestDto.name(), requestDto.email());
         return new ResponseEntity<>(Response, HttpStatus.OK);
     }
 
-    // 5. DELETE USER
+    // 4. DELETE USER
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUserAPI(@PathVariable("userId") Long id) {
         userService.deleteUser(id);

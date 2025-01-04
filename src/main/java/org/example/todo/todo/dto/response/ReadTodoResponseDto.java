@@ -13,9 +13,7 @@ public record ReadTodoResponseDto(Long todoId, String title, String contents, Lo
                 todo.getTitle(),
                 todo.getContents(),
                 todo.getCreateAt(),
-                todo.getModifiedAt()
+                todo.getUpdatedAt()
         );
-
     }
-
 }
