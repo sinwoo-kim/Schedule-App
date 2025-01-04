@@ -5,15 +5,9 @@ import org.example.todo.user.entity.User;
 
 
 @Getter
-public class UserResponseDto {
+public record UserResponseDto(String name, String email) {
 
-    private final Long userId;
-    private final String name;
-    private final String email;
-
-    public UserResponseDto(User user) {
-        this.userId = user.getUserId();
-        this.name = user.getName();
-        this.email = user.getEmail();
+    public static UserResponseDto toDto(User user) {
+        return new UserResponseDto(user.getName(), user.getEmail());
     }
 }

@@ -26,14 +26,14 @@ public class UserService {
     public List<UserResponseDto> getUserList() {
         List<User> foundUserList = userRepository.findAll();
         return foundUserList.stream()
-                            .map(UserResponseDto::new)
+                            .map(UserResponseDto::toDto)
                             .collect(Collectors.toList());
     }
 
     // READ :: FIND USER BY ID
     public UserResponseDto getUser(Long userId) {
         User foundUser = findByIdOrElseThrow(userId);
-        return new UserResponseDto(foundUser);
+        return UserResponseDto.toDto(foundUser);
     }
 
     // MODIFY
@@ -41,8 +41,7 @@ public class UserService {
     public UserResponseDto updateUser(Long userId, String username, String email) {
         User foundUser = findByIdOrElseThrow(userId);
         foundUser.update(username, email);
-
-        return new UserResponseDto(foundUser);
+        return UserResponseDto.toDto(foundUser);
     }
 
     // DELETE
