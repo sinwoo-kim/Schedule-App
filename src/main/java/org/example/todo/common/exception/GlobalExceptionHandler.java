@@ -1,8 +1,6 @@
-package org.example.todo.config;
+package org.example.todo.common.exception;
 
 import org.example.todo.common.ApiResponse;
-import org.example.todo.common.exception.DataAlreadyExistsException;
-import org.example.todo.common.exception.InvalidRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

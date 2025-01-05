@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.common.exception.InvalidRequestException;
 import org.example.todo.todo.dto.request.CreateTodoRequestDto;
+import org.example.todo.todo.dto.request.UpdateTodoRequestDto;
 import org.example.todo.todo.dto.response.CreateTodoResponseDto;
 import org.example.todo.todo.dto.response.ReadTodoListResponseDto;
 import org.example.todo.todo.dto.response.ReadTodoResponseDto;
@@ -74,13 +75,12 @@ public class TodoServiceimpl implements TodoService {
     @Transactional
     public UpdateTodoResponseDto updateTodo(
             Long todoId,
-            String title,
-            String contents
+            UpdateTodoRequestDto updateTodoRequestDto
     ) {
         Todo foundTodo = todoRepository.findById(todoId)
                                        .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
-        foundTodo.update(title, contents);
+        foundTodo.update(updateTodoRequestDto.title(), updateTodoRequestDto.contents());
         return UpdateTodoResponseDto.toDto(foundTodo);
     }
 

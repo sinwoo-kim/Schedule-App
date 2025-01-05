@@ -2,6 +2,7 @@ package org.example.todo.todo.service;
 
 
 import org.example.todo.todo.dto.request.CreateTodoRequestDto;
+import org.example.todo.todo.dto.request.UpdateTodoRequestDto;
 import org.example.todo.todo.dto.response.CreateTodoResponseDto;
 import org.example.todo.todo.dto.response.ReadTodoListResponseDto;
 import org.example.todo.todo.dto.response.ReadTodoResponseDto;
@@ -16,7 +17,7 @@ public interface TodoService {
 
     ReadTodoResponseDto getTodo(Long id);
 
-    UpdateTodoResponseDto updateTodo(Long id, String title, String contents);
+    UpdateTodoResponseDto updateTodo(Long id, UpdateTodoRequestDto updateTodoRequestDto);
 
     void deleteTodo(Long id);
 }

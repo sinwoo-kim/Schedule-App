@@ -27,9 +27,9 @@ public class TodoController {
     // 1. CREATE API
     @PostMapping
     public ResponseEntity<ApiResponse<CreateTodoResponseDto>> createTodoAPI(
-            @RequestBody CreateTodoRequestDto todoCreateRequestDto
+            @RequestBody CreateTodoRequestDto requestDto
     ) {
-        CreateTodoResponseDto response = todoService.createTodo(todoCreateRequestDto);
+        CreateTodoResponseDto response = todoService.createTodo(requestDto);
         ApiResponse apiResponse = ApiResponse.success(HttpStatus.CREATED, "created", response);
         return new ResponseEntity<ApiResponse<CreateTodoResponseDto>>(apiResponse, HttpStatus.CREATED);
     }
@@ -44,37 +44,34 @@ public class TodoController {
 
     // 3. GET 투두 API
     @GetMapping("/{todoId}")
-    public ResponseEntity<ReadTodoResponseDto> getTodoAPI(
+    public ResponseEntity<ApiResponse<ReadTodoResponseDto>> getTodoAPI(
             @PathVariable("todoId") Long id
     ) {
         ReadTodoResponseDto response = todoService.getTodo(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        ApiResponse apiResponse = ApiResponse.success(HttpStatus.OK, "Got todo", response);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     // 4. UPDATE 투두 API
     @PatchMapping("/{todoId}")
-    public ResponseEntity<UpdateTodoResponseDto> updateTodoAPI(
+    public ResponseEntity<ApiResponse<UpdateTodoResponseDto>> updateTodoAPI(
             @PathVariable("todoId") Long id,
             @RequestBody UpdateTodoRequestDto requestDto
     ) {
-        return new ResponseEntity<>(
-                todoService.updateTodo(
-                        id,
-                        requestDto.title(),
-                        requestDto.contents()
-                ),
-                HttpStatus.OK
-        );
+        UpdateTodoResponseDto response = todoService.updateTodo(id, requestDto);
+        ApiResponse apiResponse = ApiResponse.success(HttpStatus.OK, "updated", response);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
 
     // 5. DELETE 투두 API
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<String> deleteTodoAPI(
+    public ResponseEntity<ApiResponse> deleteTodoAPI(
             @PathVariable("todoId") Long id
     ) {
         todoService.deleteTodo(id);
-        return ResponseEntity.ok("Todo deletion successful");
+        ApiResponse apiResponse = ApiResponse.success(HttpStatus.OK, "deleted", null);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
     }
 
 
