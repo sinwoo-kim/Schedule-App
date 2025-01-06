@@ -1,4 +1,4 @@
-package org.example.todo.config;//package scheduledevelop.lv1.filter;
+package org.example.todo.filter;//package scheduledevelop.lv1.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

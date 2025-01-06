@@ -3,7 +3,7 @@ package org.example.todo.todo.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.common.exception.InvalidRequestException;
+import org.example.todo.exception.invalid.InvalidRequestException;
 import org.example.todo.todo.dto.request.CreateTodoRequestDto;
 import org.example.todo.todo.dto.request.UpdateTodoRequestDto;
 import org.example.todo.todo.dto.response.CreateTodoResponseDto;

@@ -1,6 +1,8 @@
 package org.example.todo.config;//package scheduledevelop.lv1.config;
 
 import jakarta.servlet.Filter;
+import org.example.todo.filter.CustomFilter;
+import org.example.todo.filter.LoginFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

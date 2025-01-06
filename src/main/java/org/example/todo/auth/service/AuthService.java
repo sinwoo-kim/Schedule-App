@@ -3,7 +3,7 @@ package org.example.todo.auth.service;
 import lombok.RequiredArgsConstructor;
 import org.example.todo.auth.dto.request.SignUpRequestDto;
 import org.example.todo.auth.dto.response.SignUpResponseDto;
-import org.example.todo.common.exception.DataAlreadyExistsException;
+import org.example.todo.exception.data.DataAlreadyExistsException;
 import org.example.todo.config.PasswordEncoder;
 import org.example.todo.user.entity.User;
 import org.example.todo.user.repository.UserRepository;
