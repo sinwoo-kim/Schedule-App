@@ -4,7 +4,7 @@ import org.example.todo.exception.ErrorCode;
 import org.example.todo.exception.common.BusinessException;
 
 public class DataAlreadyExistsException extends BusinessException {
-    public DataAlreadyExistsException(ErrorCode errorCode, String message) {
-        super(errorCode, message);
+    public DataAlreadyExistsException(String message) {
+        super(ErrorCode.CONFLICT, message);
     }
 }

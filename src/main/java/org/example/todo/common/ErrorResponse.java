@@ -2,9 +2,9 @@ package org.example.todo.common;
 
 import org.example.todo.exception.ErrorCode;
 
-public record ErrorResponse(String errorCode, String message) {
+public record ErrorResponse(String errorCode, String message, String detail) {
 
-    public static ErrorResponse of(ErrorCode errorCode, String message) {
-        return new ErrorResponse(errorCode.getCode(), message != null ? message : errorCode.getMessage());
+    public static ErrorResponse of(ErrorCode errorCode, String detail) {
+        return new ErrorResponse(errorCode.getCode(), errorCode.getMessage(), detail);
     }
 }

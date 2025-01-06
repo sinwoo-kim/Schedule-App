@@ -5,7 +5,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     //404 NOT_FOUND
-    NOT_FOUND(HttpStatus.NOT_FOUND, "ERR301", "not found");
+    NOT_FOUND(HttpStatus.NOT_FOUND, "ERR301", "not found"),
+
+    //409 CONFLICT
+    CONFLICT(HttpStatus.CONFLICT, "ERR401", "Data already Exists");
 
     private final HttpStatus status;
     private final String code;

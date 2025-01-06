@@ -24,7 +24,7 @@ public class AuthService {
 
         // 비즈니스 규칙 : 이메일이 중복되어서는 안된다.
         if (userRepository.existsByEmail(requestDto.email())) {
-            throw new DataAlreadyExistsException("email already exists");
+            throw new DataAlreadyExistsException("이메일이 이미 존재합니다.");
         }
         // 비밀번호 암호화
         String rawPassword = requestDto.password();

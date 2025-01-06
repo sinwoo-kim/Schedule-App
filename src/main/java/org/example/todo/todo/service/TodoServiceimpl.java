@@ -37,7 +37,8 @@ public class TodoServiceimpl implements TodoService {
     ) {
         log.info("1. todoService.createTodo() 실행");
         User foundUser = userRepository.findById(todoCreateRequestDto.userId())
-                                       .orElseThrow(() -> new InvalidRequestException("user not found"));
+                                       .orElseThrow(() -> new InvalidRequestException(
+                                               "조건에 맞는 유저를 찾을 수 없습니다. id = " + todoCreateRequestDto.userId()));
 
         Todo newTodo = Todo.create(
                 todoCreateRequestDto.username(),
@@ -66,7 +67,8 @@ public class TodoServiceimpl implements TodoService {
     @Override
     public ReadTodoResponseDto getTodo(Long todoId) {
         Todo foundTodo = todoRepository.findById(todoId)
-                                       .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+                                       .orElseThrow(() -> new InvalidRequestException(
+                                               "조건에 맞는 할 일(todo)을 찾을 수 없습니다. id = " + todoId));
         return ReadTodoResponseDto.toDto(foundTodo);
     }
 
@@ -78,7 +80,8 @@ public class TodoServiceimpl implements TodoService {
             UpdateTodoRequestDto updateTodoRequestDto
     ) {
         Todo foundTodo = todoRepository.findById(todoId)
-                                       .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+                                       .orElseThrow(() -> new InvalidRequestException(
+                                               "조건에 맞는 할 일(todo)을 찾을 수 없습니다. id = " + todoId));
 
         foundTodo.update(updateTodoRequestDto.title(), updateTodoRequestDto.contents());
         return UpdateTodoResponseDto.toDto(foundTodo);
@@ -90,7 +93,8 @@ public class TodoServiceimpl implements TodoService {
     public void deleteTodo(Long todoId) {
 
         Todo foundTodo = todoRepository.findById(todoId)
-                                       .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+                                       .orElseThrow(() -> new InvalidRequestException(
+                                               "조건에 맞는 할 일(todo)을 찾을 수 없습니다. id = " + todoId));
         todoRepository.deleteById(todoId);
     }
 
